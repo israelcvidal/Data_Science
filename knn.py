@@ -1,4 +1,5 @@
 import operator
+from sklearn.neighbors import KNeighborsClassifier
 import tools as t
 class knn:
 	def __init__(self, n_neighbors):
@@ -65,13 +66,19 @@ class knn:
 def main():
 	tools = t.tools()
 	kn = knn(3)
-
+	knn3 = KNeighborsClassifier(algorithm='brute',n_neighbors=3)
+	
 	tools.loadDataset('haberman.data')
 	trfeatures, trlabels, ttfeatures, ttlabels = tools.splitDataset()
 
 	kn.fit(trfeatures, trlabels)
+	knn3.fit(trfeatures, trlabels)
 
-	score = kn.score(ttfeatures, ttlabels)
-	print score
+	selfScore = kn.score(ttfeatures, ttlabels)
+	spScore = knn3.score(ttfeatures, ttlabels)
+	
+	print "Score: "
+	print "implemented knn =", selfScore
+	print "sklearn knn     =", spScore
 
 main()
