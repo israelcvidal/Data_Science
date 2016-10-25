@@ -58,12 +58,10 @@ class knn:
 			predictions.append(result)
 		return predictions
 
-
 	def score(self, ttfeatures, ttlabels):
 		predictions = self.predict(ttfeatures)
 		return self.getAccuracy(ttlabels, predictions)
 		
-
 def main():
 	tools = t.tools()
 	kn = knn(3)
@@ -77,23 +75,3 @@ def main():
 	print score
 
 main()
-
-# knn = knn()
-
-# knn.fit([(2, 2, 2), (3, 3, 2), (4, 4, 4)], ['a', 'b', 'b'] )
-# print knn.getResponse(knn.getNeighbors(knn.trfeatures, (1,1,1) , 2))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
