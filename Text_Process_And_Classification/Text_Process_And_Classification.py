@@ -38,11 +38,11 @@ numberOfFeatures = 3
 top_features = []
 data = []
 
-#we set the new set of features 'top_features' as the numberOfFeatures most frequent words in each text
+#setting the new set of features 'top_features' as the numberOfFeatures most frequent words in each text
 for line in features:
 	top_features.append([x[0] for x in  nltk.FreqDist(line).most_common(numberOfFeatures)])
 
-#we make a dictionary for each text with the important words from that text as key and value 'True':
+#making a dictionary for each text with the important words from that text as key and value 'True':
 # {word='True'}
 # after setting the dictionary of a text, we add the tuple (dictionary,label) to the new data set
 for features, label in zip(top_features, labels):
