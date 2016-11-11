@@ -47,9 +47,7 @@ class mlr():
 	    # return 1.0 - sum((self.labels-self.predict(features))**2)/self.total_sum_of_squares()
 	    return float(1-sum([(float(x)-float(y))**2 for x,y in zip(labels, self.predict(features))])/self.total_sum_of_squares(labels))
 
-  	def normalize():
-  		pass
-
+    
 def main():
 	learning_rate = 0.000001
 	max_iterations = 1
