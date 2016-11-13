@@ -3,6 +3,7 @@ import xml.etree.ElementTree as ET
 import numpy as np
 import nltk.classify.decisiontree as dt
 import math
+from sklearn.utils import shuffle
 
 # In the first execution is necessary to download packets from nltk:
 # nltk.download()
@@ -34,7 +35,7 @@ for item in root.findall('item'):
     	labels.append(category)
   
 #number of features we want to consider from the words selected from each text
-numberOfFeatures = 3
+numberOfFeatures = 10
 top_features = []
 data = []
 
@@ -53,9 +54,14 @@ for features, label in zip(top_features, labels):
 
 # now we have our data set as a list [(dict,label)] of each text, we can split the data set into tr and tt sets. 
 ls = int(math.floor(len(data)*0.7))
+data = shuffle(data, random_state=0)
 tr = data[:ls]
 tt = data[ls:]
 
 # we can now classify our data:
+print 'Using the %d most frequent words to classify.' %numberOfFeatures
 classifier = nltk.NaiveBayesClassifier.train(tr)
-print nltk.classify.accuracy(classifier,tt)
+print 'NaiveBayes: ' + str(nltk.classify.accuracy(classifier,tt))
+
+classifier = nltk.DecisionTreeClassifier.train(tr)
+print 'DecisionTree: ' + str(nltk.classify.accuracy(classifier,tt))
