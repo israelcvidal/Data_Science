@@ -15,7 +15,7 @@ stemer = nltk.stem.RSLPStemmer()
 
 # setting words to ignore in the classification
 stopwords = nltk.corpus.stopwords.words("portuguese")
-special_symbols = [',', '.', '%', '(', ')', '!', '?', '@', '#', '&', '*', ';', ':', '<', '>']
+special_symbols = [',', '.', '(', ')', '!', '?', '@', '&', '*', ';', ':']
 
 
 features = []
@@ -25,14 +25,32 @@ labels = []
 for item in root.findall('item'):
     category = item.get('category')
     text = item.find("text").text
+    title = item.find("title").text
+    description = item.find("description").text
 
-#getting all words - except the ones in stopwords and special_symbols - from each text as a list and adding it do 'features'
-#in the same position as the respective label in the list 'labels'
+    #getting all words - except the ones in stopwords and special_symbols - from each text, title and description as a list and adding it do 'features'
+    #in the same position as the respective label in the list 'labels'
+    new_text = []
+    if type(title) is unicode:
+        words = nltk.word_tokenize(title)
+        for w in words:
+            if w not in stopwords and w not in special_symbols:
+                new_text.append(stemer.stem(w.lower())) 
+
+    if type(description) is unicode:
+        words = nltk.word_tokenize(description)
+        for w in words:
+            if w not in stopwords and w not in special_symbols:
+                new_text.append(stemer.stem(w.lower())) 
+
     if type(text) is unicode: 
     	words = nltk.word_tokenize(text)
-    	new_text = [stemer.stem(w.lower()) for w in words if w not in stopwords and w not in special_symbols]
-    	features.append(new_text)
-    	labels.append(category)
+        for w in words:
+            if w not in stopwords and w not in special_symbols:
+                new_text.append(stemer.stem(w.lower())) 
+
+    features.append(new_text)
+    labels.append(category)
   
 #number of features we want to consider from the words selected from each text
 numberOfFeatures = 10
@@ -54,14 +72,14 @@ for features, label in zip(top_features, labels):
 
 # now we have our data set as a list [(dict,label)] of each text, we can split the data set into tr and tt sets. 
 ls = int(math.floor(len(data)*0.7))
-data = shuffle(data, random_state=0)
+# data = shuffle(data, random_state=0)
 tr = data[:ls]
 tt = data[ls:]
 
 # we can now classify our data:
 print 'Using the %d most frequent words to classify.' %numberOfFeatures
-classifier = nltk.NaiveBayesClassifier.train(tr)
-print 'NaiveBayes: ' + str(nltk.classify.accuracy(classifier,tt))
+# classifier = nltk.NaiveBayesClassifier.train(tr)
+# print 'NaiveBayes: ' + str(nltk.classify.accuracy(classifier,tt))
 
 classifier = nltk.DecisionTreeClassifier.train(tr)
 print 'DecisionTree: ' + str(nltk.classify.accuracy(classifier,tt))
